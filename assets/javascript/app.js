@@ -27,7 +27,7 @@ $(document).ready(function () {
 
 
         //create local 'temp' object for holding train data and push data to firebase
-        database.ref().set({
+        database.ref().push({
 
             name: trainName,
             destination: destinationName,
@@ -45,42 +45,42 @@ $(document).ready(function () {
     });
 
 
-
-
-
-
-    //TODO: firebase event to add train to my html from firebase database
-    database.ref().on('child_added', function (childSnapshot) {
-        // console.log(childSnapshot.val());
-
-        //store the data into a variable
-        let trainName = childSnapshot.val().name;
-        let destinationName = childSnapshot.val().destination;
-        let trainTime = childSnapshot.val().time;
-        let frequencyTime = childSnapshot.val().frequency;
-
-        //put the time the first train leaves into a time that is readable
-        let translateTime = moment.unix(trainTime).format("HH:mm");
-
-
-
-
-
-
-        //create new rows
-        let newRow = $("<tr>").append(
-            $("<td>").text(trainName),
-            $("<td>").text(destinationName),
-            $("<td>").text(frequencyTime),
-            $("<td>").text(translateTime),
-            $("<td>").text(),
-
-        );
-
-
-
-    });
 });
+
+
+
+//TODO: firebase event to add train to my html from firebase database
+database.ref().on('child_added', function (childSnapshot) {
+    console.log(childSnapshot.val());
+
+    //store the data into a variable
+    let trainName = childSnapshot.val().name;
+    let destinationName = childSnapshot.val().destination;
+    let trainTime = childSnapshot.val().time;
+    let frequencyTime = childSnapshot.val().frequency;
+
+    //put the time the first train leaves into a time that is readable
+    let translateTime = moment.unix(trainTime).format("HH:mm");
+
+
+
+
+
+
+    //create new rows
+    let newRow = $("<tr>").append(
+        $("<td>").text(trainName),
+        $("<td>").text(destinationName),
+        $("<td>").text(frequencyTime),
+        $("<td>").text(translateTime),
+        // $("<td>").text()
+
+    );
+
+
+
+});
+
 //TODO:
 //User inputs the time the 1st train leaves as well as how often the train comes (frequency)
 ///Need to use the inputs above to calculate the next arrival time using the current time and the frequency of the train as well as time the first train comes.
