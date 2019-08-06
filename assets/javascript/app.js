@@ -16,13 +16,13 @@ var database = firebase.database();
 
 $(document).ready(function () {
     //on click function to add trains to the schedule based on the form field id's in my html
-    $("#addTrain").click(function (event) {
+    $('#addTrain').click(function (event) {
         event.preventDefault();
 
         //grab the value from the form field and trim and whitespace
         let trainName = $('#trainNameInput').val().trim();
         let destinationName = $('#destinationInput').val().trim();
-        let trainTime = $('#trainTimeInput').val().trim(); //FIXME: will I need a moment function on this one???
+        let trainTime = moment($('#trainTimeInput').val().trim(), "HH:mm").format("X");
         let frequencyTime = $('#frequencyInput').val().trim();
 
 
@@ -37,20 +37,50 @@ $(document).ready(function () {
 
         alert("Train has been added to the schedule");
 
-        //clear all the text-boxes
+        //clear all the text-boxes upon submission
         $('#trainNameInput').val("");
         $('#destinationInput').val("");
         $('#trainTimeInput').val("");
         $('#frequencyInput').val("");
     });
+
+
+
+
+
+
+    //TODO: firebase event to add train to my html from firebase database
+    database.ref().on('child_added', function (childSnapshot) {
+        // console.log(childSnapshot.val());
+
+        //store the data into a variable
+        let trainName = childSnapshot.val().name;
+        let destinationName = childSnapshot.val().destination;
+        let trainTime = childSnapshot.val().time;
+        let frequencyTime = childSnapshot.val().frequency;
+
+        //put the time the first train leaves into a time that is readable
+        let translateTime = moment.unix(trainTime).format("HH:mm");
+
+
+
+
+
+
+        //create new rows
+        let newRow = $("<tr>").append(
+            $("<td>").text(trainName),
+            $("<td>").text(destinationName),
+            $("<td>").text(frequencyTime),
+            $("<td>").text(translateTime),
+            $("<td>").text(),
+
+        );
+
+
+
+    });
 });
-
-
-
-
-
-//TODO: upload train data to firebase
-
 //TODO:
 //User inputs the time the 1st train leaves as well as how often the train comes (frequency)
 ///Need to use the inputs above to calculate the next arrival time using the current time and the frequency of the train as well as time the first train comes.
