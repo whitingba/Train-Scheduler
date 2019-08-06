@@ -14,12 +14,40 @@ firebase.initializeApp(firebaseConfig);
 //variable created to reference the firebase database.
 var database = firebase.database();
 
-//TODO: on click function to add trains to the schedule based on the form field id's in my html
-////grab user inputs
-//////create local 'temp' object for holding employee data
-////////push employee data to the database
-//////////??alert box that train was added
-////////////clear all the text-boxes
+$(document).ready(function () {
+    //on click function to add trains to the schedule based on the form field id's in my html
+    $("#addTrain").click(function (event) {
+        event.preventDefault();
+
+        //grab the value from the form field and trim and whitespace
+        let trainName = $('#trainNameInput').val().trim();
+        let destinationName = $('#destinationInput').val().trim();
+        let trainTime = $('#trainTimeInput').val().trim(); //FIXME: will I need a moment function on this one???
+        let frequencyTime = $('#frequencyInput').val().trim();
+
+
+        //create local 'temp' object for holding train data and push data to firebase
+        database.ref().set({
+
+            name: trainName,
+            destination: destinationName,
+            time: trainTime,
+            frequency: frequencyTime
+        })
+
+        alert("Train has been added to the schedule");
+
+        //clear all the text-boxes
+        $('#trainNameInput').val("");
+        $('#destinationInput').val("");
+        $('#trainTimeInput').val("");
+        $('#frequencyInput').val("");
+    });
+});
+
+
+
+
 
 //TODO: upload train data to firebase
 

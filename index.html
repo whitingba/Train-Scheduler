@@ -88,22 +88,24 @@
                 <form id="FormA">
                     <div class="form-group">
                         <label for="TrainName">Train Name</label>
-                        <input type="text" class="form-control train-input" placeholder="ex. Orient Express">
+                        <input type="text" class="form-control train-input" id="trainNameInput"
+                            placeholder="ex. Orient Express">
                     </div>
                     <div class="form-group">
                         <label for="Destination">Destination</label>
-                        <input type="text" class="form-control train-input" placeholder="ex. Istanbul">
+                        <input type="text" class="form-control train-input" id="destinationInput"
+                            placeholder="ex. Istanbul">
                     </div>
                     <div class="form-group">
                         <label for="TrainTime">First Train Leaves (HH:mm - military time)</label>
-                        <input type="text" class="form-control train-input" placeholder="ex. 18:45">
+                        <input type="text" class="form-control train-input" id="trainTimeInput" placeholder="ex. 18:45">
                     </div>
                     <div class="form-group">
                         <label for="Frequency">Frequency (min)</label>
-                        <input type="text" class="form-control train-input"
+                        <input type="text" class="form-control train-input" id="frequencyInput"
                             placeholder="ex. 45 for 45 minutes or 120 for 2 hours">
                     </div>
-                    <button type="button" class="btn btn-secondary">Submit Train</button>
+                    <button type="button" name="button" class="btn btn-secondary" id="addTrain">Submit Train</button>
                 </form>
             </div>
 
