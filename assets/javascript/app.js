@@ -58,39 +58,57 @@ database.ref().on('child_added', function (childSnapshot) {
 
     //store the data into a variable
     let trainName = childSnapshot.val().name;
-    console.log(trainName);
+    // console.log(trainName);
     let destinationName = childSnapshot.val().destination;
-    console.log(destinationName);
+    // console.log(destinationName);
     let trainTime = childSnapshot.val().time;
-    console.log("CURRENT TIME: " + moment(trainTime).format("hh:mm"));
+    //console.log("Train Time is: " + moment(trainTime, "HH:mm"));
     let frequencyTime = childSnapshot.val().frequency;
-    console.log(frequencyTime);
+    // console.log(frequencyTime);
 
-    let translateTime = moment(trainTime, "HH:mm");
 
-    //put the time the first train leaves into a time that is readable
+    // tried this first: let translateTime = moment(trainTime, "HH:mm").format("X") / 60; and my times were not accurate. Important to put the time back a year so that the original start time will always be before the current time
+    let translateTime = moment(trainTime, "HH:mm").subtract(1, "years");
+    // console.log(translateTime);
+    //moment("HH:mm").format("X") / 60 - this is current time
+
+
+    //let currentTime = moment();
+    // console.log("Current Time: " + moment(currentTime).format("hh:mm"));
+
+    //find the different in time 
+    let timeDifference = moment().diff(moment(translateTime), "minutes");
+    //   console.log("Difference in time: " + timeDifference);
+
+    //find the remainder between the time difference and the frequency
+    let remainder = timeDifference % frequencyTime;
+    // console.log(remainder);
+
+    //show the minutes until the next train arrives 
+    let minutesAway = frequencyTime - remainder;
+    //console.log("Minutes until next train: " + minutesAway);
+
+    //this needs to show up in the table as 'next arrival'
+    let nextTrainArrivesTime = moment().add(minutesAway, "minutes");
+    let translateFinalTime = moment(nextTrainArrivesTime).format("hh:mm");
+    // console.log("arrival time: " + translateFinalTime);
+
     // let translateTime = moment(trainTime).format("HH:mm");
-    // console.log(translateTime);//FIXME: putting current time, not time that was input
-
-    //TODO:
-    //User inputs the time the 1st train leaves as well as how often the train comes (frequency)
-    ///Need to use the inputs above to calculate the next arrival time using the current time and the frequency of the train as well as time the first train comes.
-    ////As well as use the difference of next arrival time less the last arrival time to calculate how many minutes away the next train is
-    /////some of this could be simple math and some will need moment.js
+    // console.log(translateTime)
 
 
-    //FIXME:
+
+
     //create new rows and have data from firebase append to them
     let newRow = $("<tr>").append(
         $("<td>").text(trainName),
         $("<td>").text(destinationName),
         $("<td>").text(frequencyTime),
-        $("<td>").text(translateTime),
-        //TODO: $("<td>").text() - will need one for next arrival
-        //TODO: $("<td>").text() - will need one for minutes away
+        $("<td>").text(translateFinalTime),
+        $("<td>").text(minutesAway)
     );
 
-
+    $('#tableA > tbody').append(newRow);
 
 });
 
